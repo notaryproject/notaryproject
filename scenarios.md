@@ -250,6 +250,37 @@ A weakness is discovered in a widely used cryptographic algorithm and a decision
 1. Key revocation, chain of trust, etc. must all work for the expected lifetime of a version of the client software while these changes are made.
 1. The actions that different parties need to perform must be clearly articulated, along with the result of not performing those actions.
 
+### Scenario #10: Verifying Different Types of Artifacts
+
+Artifacts may be referenced in different ways and verification of signatures should handle the different types of artifact references:
+
+1. Immutable `sha256` digests
+1. Mutable tags
+1. Immutable tags available in some registries
+1. Tags and digests to a manifest list for multi-platform images
+1. Artifacts other than images that may be stored in a registry and referenced by tag or digest
+
+**Implications of this requirement:**
+
+1. Verification may need to first dereference the artifact name to a `sha256` digest.
+1. Verifying a mutable tag is expected to fail between the time a new artifact is pushed and later signed.
+1. Verification of a manifest list may fail if some of the dereferenced manifests are not signed.
+
+### Scenario #11: Delayed Verification
+
+Artifacts are built and deployed by a CI/CD pipeline where the signing step may have been repeated for newer artifact versions before the previous deployment has completed. This includes scenarios where a deployment tool dereferences the artifact from a tag to a `sha256` digest and may pull the older artifact to a new node. Possible reasons to deploy to a new node include a cluster upgrade, node failure, or a scaling event.
+
+1. CI builds a new artifact.
+1. The artifact is signed.
+1. Other artifacts repeat the above process.
+1. The orchestration tool is configured to deploy the original artifact.
+1. Node verifies the artifact signature before allowing it to run.
+
+**Implications of this requirement:**
+
+1. Signing a new artifact must not implicitly revoke the signatures on previous artifacts.
+1. A process to explicitly revoke signatures of artifacts is needed.
+
 ## Open Discussions
 
 * What is the relationship between a signature, an artifact and a registry?
