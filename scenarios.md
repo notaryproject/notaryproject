@@ -250,6 +250,31 @@ A weakness is discovered in a widely used cryptographic algorithm and a decision
 1. Key revocation, chain of trust, etc. must all work for the expected lifetime of a version of the client software while these changes are made.
 1. The actions that different parties need to perform must be clearly articulated, along with the result of not performing those actions.
 
+### Scenario #11: Chaining from a trusted key
+
+If a user does not have a specific key for a given artifact, verified using a third party system, they will need to determine the trusted signing key(s) for an artifact by chaining from a trusted key.
+
+1. The user determines the trusted key(s) for a specific artifact using delegations from a trusted root.
+1. The user downloads and verifies an artifact using Notary v2 and the trusted key(s) discovered in the previous step.
+
+**Implications of this requirement**
+
+1. Users must be able to use the chain of trust to obtain per-package trusted keys, verified by a trusted root.
+1. Users must be able to access the chain of delegations.
+1. Users must be able to configure roots of trust.
+
+### Scenario #12: Using multiple roots of trust
+
+A user using multiple registries will want to ensure artifacts are verified using the correct root of trust. For example, if an artifact is supposed to be signed by a key delegated to their private registry, they never want to download a version signed by a key from a public registry. Additionally, they may always want to look for artifacts signed by their private registry key first, and so want an enforced ordering of roots of trust.
+
+1. The user attempts to download and verify a package using roots of trust in priority order.
+1. Notary v2 verifies that each specific artifact may be verified using a given root of trust during validation using the user's configuration information.
+
+**Implications of this requirement**
+
+1. Users must be able to prioritize each root of trust that they use.
+1. Users must be able to specify that a particular artifact may only be verified using a key delegated from a given root of trust.
+
 ## Open Discussions
 
 * What is the relationship between a signature, an artifact and a registry?
