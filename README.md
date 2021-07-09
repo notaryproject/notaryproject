@@ -20,6 +20,7 @@ Additional details for Notary v2 efforts:
 - [Scenarios][nv2-scenarios]
 - [Threat Model][nv2-threat-model]
 - [Definitions & Terms][nv2-definitions]
+- [Governance](#governance)
 - [Contributing](#contributing-&-conversations)
 
 ## Notary v2 Overview
@@ -152,6 +153,10 @@ As a result, we identified the following stages of the Notary v2 effort:
 Throughout the Notary v2 effort, updates to the stages of development and areas of focus will be detailed.
 
 - [2021 - February Status Update](./status-updates/notary-status-2021-02.md)
+
+## Governance
+
+See [GOVERNANCE.md](GOVERNANCE.md) for project governance.
 
 ## Contributing & Conversations
 
