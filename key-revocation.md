@@ -19,6 +19,35 @@ Cons:
 * Keys can't be revoked before expiration
 * Artifacts must be re-signed after expiration, unless a timestamping service is used.
 
+### Approaches
+
+Developers can have keys with different expiry times.
+
+Expiry time more than or equal to 1 year is generally considered as **long term**, and expiry time less than or equal to 1 day is generally considered as **short term**. Other expiry time ranges falls in to long term or short term depending on various scenarios.
+
+In some scenarios, the developers can use self-signed certificates or even deploy using the public key directly without a third party. When the public key is directly used, it means life-time validity.
+
+#### Long Term
+
+Longer expiry can make the private key exposed for a longer time, which implies larger blast radius. In other words, more artifacts are impacted when a key with longer key duration is rescinded.
+
+Long term keys are generally associated with roots, used infrequently, kept offline when not in use, and need additional protections (e.g. [HSMs](https://en.wikipedia.org/wiki/Hardware_security_module)) against compromise. Thus long term keys SHOULD not be used as signing keys.
+
+#### Short Term
+
+Since the key has short expiry that expires in days or even in minutes, the signer has to generate the key pair and get the public key certified more often by a issuing CA. This requires a robust and secure signing infrastructure that is online and can issue certificates at a higher frequency. Community developers can choose a common trusted public CA to authenticate themselves and certify their short-term ephemeral keys.
+
+* As the key expiry is shorter, timestamping MUST be used where the artifact is expected to be consumed beyond the key expiry.
+* Lowers risks of signing key compromise due to lower blast radius, when used along with timestamping.
+* Key storage can be simpler as compromised keys have limited blast radius and does not need to be protected for longer periods.
+
+### Recommendation
+
+* Publishers should decide whether long term or short term keys are suitable for their use case based on their internal threat assessment.
+* Timestamping SHOULD be used for both long term and short term keys for added protection against compromised keys.
+* When artifacts are consumed beyond signing key expiry (more common for short term keys), timestamping MUST be used.
+* Deployer MUST be able to specify whether timestamp signature is required, and if expired signatures are allowed.
+
 
 ## Key revocation lists (Deny lists)
 
